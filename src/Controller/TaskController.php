@@ -15,11 +15,24 @@ class TaskController {
     }
 
     public function list() {
+        $tasks = $this->repository->findAll();
         require __DIR__ . '/../View/task_list.php';
+        return;
     }
 
     public function add(){
-        echo "Форма добавления задачи";
+        if ($_SERVER['REQUEST_METHOD'] === 'POST')
+        {
+            $title = trim($_POST['title']??'');
+            if ($title === '')
+            {
+                $err = 'Пустая задача';
+                require __DIR__ . '/../View/task_form.php';
+                return;
+            }
+            $task = new Task($title);
+            $this->repository->add($task);
+        }
     }
 
     public function getTasks()  {

@@ -14,13 +14,15 @@ $tasks = $this->getTasks();
 
 <body>
     <h1> Список задач</h1>
+    <a href="?route=task/add">Добавить</a>
     <ul>
         <?php foreach ($tasks as $task): ?>
-            <li><?= htmlspecialchars($task->getTitle())?></li>
+            <li>
+                <?= htmlspecialchars($task->getTitle())?>
+            </li>
             <?= $task->isCompleted() ? "✔" : "❌"?>
         </li>
         <?php endforeach; ?>
-        <a href="?route=task/add"></a>
     </ul>
 </body>
 

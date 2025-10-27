@@ -13,4 +13,8 @@ class InMemoryTaskRepository implements TaskRepositoryInterface
             new Task("Опоздать на пары")
         ];
     }
+    public function add($task): void{ 
+
+
+    }
 }

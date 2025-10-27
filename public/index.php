@@ -9,7 +9,10 @@ use App\Container\Container;
 
 $route = $_GET['route']??'task/list';
 
+/* $config = require __DIR__ .'/../src/Model/config.php';
+$container = new Container($config); */
 $container = new Container();
+
 $container->set(InMemoryTaskRepository::class, fn () => new InMemoryTaskRepository());
 $container->set(TaskController::class, function (Container $c) {
     $repo = $c->get(InMemoryTaskRepository::class);
@@ -17,7 +20,7 @@ $container->set(TaskController::class, function (Container $c) {
 });
 
 $controller = $container->get(TaskController::class);
-
+echo $controller::class;
 switch ($route) {
     case 'task/list':
         $controller->list();

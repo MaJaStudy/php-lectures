@@ -1,27 +1,174 @@
-<?php
-
-$tasks = $this->getTasks();
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>Лист Задач</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 15px;
+            margin: 10px 0;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-left: 5px solid #007bff;
+        }
+        li.completed {
+            background-color: #28a745;
+            border-left-color: #1e7e34;
+            color: white;
+        }
+        .add-link {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .add-link:hover {
+            background-color: #218838;
+            text-decoration: none;
+            color: white;
+        }
+        .task-toggle {
+            background: none;
+            border: 2px solid #007bff;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .task-toggle:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        .task-toggle.completed {
+            background-color: white;
+            border-color: white;
+            color: #28a745;
+        }
+        .task-toggle.completed:hover {
+            background-color: #f8f9fa;
+            color: #28a745;
+        }
+        .task-content {
+            flex-grow: 1;
+            margin: 0 20px;
+            font-size: 16px;
+        }
+        .task-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .task-status {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-right: 15px;
+        }
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.3s;
+        }
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .empty-state p {
+            color: #6c757d;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin: 0;
+        }
+    </style>
 </head>
 
 <body>
-    <h1> Список задач</h1>
-    <ul>
-        <?php foreach ($tasks as $task): ?>
-            <li><?= htmlspecialchars($task->getTitle())?></li>
-            <?= $task->isCompleted() ? "✔" : "❌"?>
-        </li>
-        <?php endforeach; ?>
-        <a href="?route=task/add"></a>
-    </ul>
+    <div class="header">
+        <h1>Список задач</h1>
+        <a href="?route=task/add" class="add-link">+ Добавить задачу</a>
+    </div>
+    
+    <?php if (empty($tasks)): ?>
+        <div class="empty-state">
+            <p>Задачи отсутствуют. Добавьте первую задачу!</p>
+            <a href="?route=task/add" class="add-link">+ Добавить задачу</a>
+        </div>
+    <?php else: ?>
+        <ul>
+            <?php foreach ($tasks as $task): ?>
+                <li class="<?= $task->isCompleted() ? 'completed' : '' ?>">
+                    <button class="task-toggle <?= $task->isCompleted() ? 'completed' : '' ?>" 
+                            onclick="location.href='?route=task/toggle&id=<?= $task->getId() ?>'">
+                        <?= $task->isCompleted() ? "✓" : "" ?>
+                    </button>
+                    
+                    <div class="task-content">
+                        <?= htmlspecialchars($task->getTitle()) ?>
+                    </div>
+                    
+                    <div class="task-actions">
+                        <span class="task-status">
+                            <?= $task->isCompleted() ? "Выполнено" : "Не выполнено" ?>
+                        </span>
+                        <button class="delete-btn" 
+                                onclick="if(confirm('Удалить задачу?')) location.href='?route=task/delete&id=<?= $task->getId() ?>'">
+                            Удалить
+                        </button>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
 </body>
 
 </html>

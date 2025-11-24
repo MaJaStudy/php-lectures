@@ -34,7 +34,6 @@ class FileTaskRepository implements TaskRepositoryInterface
             );
         }
         
-        // Сортируем по ID в порядке убывания (как в MySQL с ORDER BY id DESC)
         usort($tasks, function($a, $b) {
             return $b->getId() - $a->getId();
         });
@@ -46,7 +45,6 @@ class FileTaskRepository implements TaskRepositoryInterface
     { 
         $tasks = $this->findAll();
         
-        // Находим максимальный ID
         $maxId = 0;
         foreach ($tasks as $existingTask) {
             if ($existingTask->getId() > $maxId) {
@@ -60,7 +58,6 @@ class FileTaskRepository implements TaskRepositoryInterface
             'completed' => $task->isCompleted()
         ];
         
-        // Добавляем новую задачу в начало массива
         array_unshift($tasks, $newTask);
         
         file_put_contents($this->filepath, json_encode($tasks, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
@@ -78,7 +75,6 @@ class FileTaskRepository implements TaskRepositoryInterface
                 'completed' => $task->isCompleted()
             ];
             
-            // Переключаем статус для найденной задачи
             if ($task->getId() == $taskId) {
                 $item['completed'] = !$task->isCompleted();
             }
@@ -95,7 +91,6 @@ class FileTaskRepository implements TaskRepositoryInterface
         $data = [];
         
         foreach ($tasks as $task) {
-            // Пропускаем задачу, которую нужно удалить
             if ($task->getId() == $taskId) {
                 continue;
             }

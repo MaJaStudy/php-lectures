@@ -27,7 +27,7 @@ class MySqlTaskRepository implements TaskRepositoryInterface
         
         return $tasks;
     }
-    ф
+    
     public function add(Task $task): void
     {
         $stmt = $this->pdo->prepare('INSERT INTO tasks (title, completed) VALUES (:title, :completed)');
@@ -39,12 +39,10 @@ class MySqlTaskRepository implements TaskRepositoryInterface
     
     public function toggle(int $taskId): void
     {
-        // Сначала получаем текущий статус
         $stmt = $this->pdo->prepare("SELECT completed FROM tasks WHERE id = :id");
         $stmt->execute([':id' => $taskId]);
         $currentStatus = $stmt->fetchColumn();
         
-        // Переключаем статус
         $newStatus = $currentStatus ? 0 : 1;
         
         $stmt = $this->pdo->prepare("UPDATE tasks SET completed = :completed WHERE id = :id");

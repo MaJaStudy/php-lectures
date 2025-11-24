@@ -22,6 +22,29 @@
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+        .mode-switcher {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .mode-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin: 0 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .mode-btn.active {
+            background: #007bff;
+        }
+        .mode-btn:hover {
+            background: #0056b3;
+            color: white;
+            text-decoration: none;
+        }
         ul {
             list-style: none;
             padding: 0;
@@ -133,15 +156,23 @@
 </head>
 
 <body>
+    <div class="mode-switcher">
+        <a href="?route=task/switch-mode&mode=mysql" class="mode-btn <?= ($_SESSION['repository_mode'] ?? 'mysql') === 'mysql' ? 'active' : '' ?>">
+            MySQL режим
+        </a>
+        <a href="?route=task/switch-mode&mode=file" class="mode-btn <?= ($_SESSION['repository_mode'] ?? 'mysql') === 'file' ? 'active' : '' ?>">
+            File режим
+        </a>
+    </div>
+
     <div class="header">
-        <h1>Список задач</h1>
+        <h1>Список задач (<?= ($_SESSION['repository_mode'] ?? 'mysql') === 'mysql' ? 'MySQL' : 'File' ?>)</h1>
         <a href="?route=task/add" class="add-link">+ Добавить задачу</a>
     </div>
     
     <?php if (empty($tasks)): ?>
         <div class="empty-state">
             <p>Задачи отсутствуют. Добавьте первую задачу!</p>
-            <a href="?route=task/add" class="add-link">+ Добавить задачу</a>
         </div>
     <?php else: ?>
         <ul>

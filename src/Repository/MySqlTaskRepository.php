@@ -17,7 +17,7 @@ class MySqlTaskRepository implements TaskRepositoryInterface
     
     public function findAll(): array
     {
-        $stmt = $this->pdo->query("SELECT id, title, completed FROM tasks");
+        $stmt = $this->pdo->query("SELECT id, title, completed FROM tasks ORDER BY id DESC");
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $tasks = [];
         
@@ -27,7 +27,7 @@ class MySqlTaskRepository implements TaskRepositoryInterface
         
         return $tasks;
     }
-    
+    ф
     public function add(Task $task): void
     {
         $stmt = $this->pdo->prepare('INSERT INTO tasks (title, completed) VALUES (:title, :completed)');

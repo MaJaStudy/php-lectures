@@ -33,6 +33,12 @@ class FileTaskRepository implements TaskRepositoryInterface
                 $item['id'] ?? null
             );
         }
+        
+        // Сортируем по ID в порядке убывания (как в MySQL с ORDER BY id DESC)
+        usort($tasks, function($a, $b) {
+            return $b->getId() - $a->getId();
+        });
+        
         return $tasks;
     }
     
@@ -48,11 +54,14 @@ class FileTaskRepository implements TaskRepositoryInterface
             }
         }
         
-        $tasks[] = [ 
+        $newTask = [ 
             'id' => $maxId + 1,
             'title' => $task->getTitle(),
             'completed' => $task->isCompleted()
         ];
+        
+        // Добавляем новую задачу в начало массива
+        array_unshift($tasks, $newTask);
         
         file_put_contents($this->filepath, json_encode($tasks, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
